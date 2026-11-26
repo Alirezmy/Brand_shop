@@ -11,6 +11,13 @@ class BaseModel(models.Model):
         abstract = True
 
 
+class Status(models.TextChoices):
+    PENDING = 'PND', _('Pending')
+    SUCCEED = 'SCD', _('Succeed')
+    CANCELLED = 'CLD', _('Cancelled')
+    FAILED = 'FLD', _('Failed')
+
+
 class Order(BaseModel):
 
     class Status(models.TextChoices):
@@ -43,3 +50,7 @@ class OrderItem(BaseModel):
     ):
         self.unit_price = self.product.price
         super().save()
+
+class Payment(BaseModel):
+    order = models.ForeignKey(to=Order, on_delete=models.CASCADE)
+    amount = models.DecimalField(decimal_places=5, max_digits=10)

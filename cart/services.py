@@ -3,6 +3,12 @@ from cart.models import Cart, CartItem
 from django.db import transaction
 
 
+def get_active_cart(user):
+    cart = Cart.objects.get(user=user, is_active=True)
+    if not cart:
+        raise
+    return cart
+
 @transaction.atomic
 def add_to_cart(user, product_id, quantity):
     product = Product.objects.get(id=product_id)
